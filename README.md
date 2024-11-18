@@ -2,7 +2,7 @@
 
 Aplicação web para segmentação e classificação de imagens de satélite.
 
-## Acessando os projetos 
+## Acessando o projeto
 > É necessário ter python e git instalados na sua máquina
 
 Baixe o projeto:
