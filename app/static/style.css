@@ -1,3 +1,120 @@
-h1 {
-    color: blue;
+/* Reset CSS */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins";
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+  
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 1vh 10vh;
+    max-height: 7%;
+    border-bottom: 1px solid #ddece4;
+}
+
+.app-name p {
+    color: green;
+    font-size: 4.4vh;
+    font-family: "Poppins";
+}
+
+.rigth-corner {
+    display: flex;
+    align-items: center; 
+    gap: 4vh;
+}
+
+.link-text {
+    font-size: 2.4vh;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+
+.link-text:hover {
+    color: green;
+    text-decoration: underline;
+}
+
+.icon {
+    width: 5.5vh;
+}
+
+.content {
+    max-height: 80%;
+    margin: 3vh 5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10vh;
+}
+
+.title {
+    font-size: 3.5vh;
+    font-weight: 400;
+    margin-top: 3.5vh;
+}
+
+#map { 
+    height: 35rem; 
+    width: 55rem;
+}
+
+#select {
+
+}
+
+.controls {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 30rem;
+    width: 16rem;
+    padding: 2vh;
+    box-shadow: 0 0 10px 2px rgba(66, 113, 94, 0.5);
+    border-radius: 10px;
+}
+
+.controls h1 {
+    margin: 0 auto;
+    font-weight: 400;
+    font-size: 2.6vh;
+}
+
+.controls form {
+   margin: 3vh 6vh;
+}
+
+.controls form input {
+    margin: 2.5vh 0;
+    height:2vh; 
+    width:2vh;
+}
+
+.controls form label {
+    font-size: 2.3vh;
+    margin-left: 1.5vh;
+}
+
+button {
+    background-color: #187318;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 2.3vh;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 2vh auto 0;
+}
+
+button:hover {
+    background-color: #08a224;
 }
