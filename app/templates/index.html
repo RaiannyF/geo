@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
 
@@ -59,7 +59,7 @@
             <h1 class="title"> Selecione um polígono com a área de interesse </h1>
             <div id="map"></div>
         </div>
-            
+
         <div class="controls">
             <h1> Escolha a técnica </h1>
             <form>
@@ -74,8 +74,12 @@
                 <input type="radio" id="tec5" name="method" value="tec5">
                 <label for="tec5"> Técnica 5 </label><br>
             </form>
-            <button id="btnSegmentar"> SEGMENTAR </button>
+            <button id="btnSegmentar">
+                <span id="btnText">SEGMENTAR</span>
+                <span id="btnSpinner" class="spinner" style="display: none;"></span>
+            </button>
         </div>
     </div>
 </body>
+
 </html>

@@ -108,13 +108,37 @@ button {
     background-color: #187318;
     color: white;
     border: none;
-    padding: 15px 30px;
+    width: 20vh;
+    height: 8vh;
     font-size: 2.3vh;
     border-radius: 10px;
     cursor: pointer;
     margin: 2vh auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button:hover {
     background-color: #08a224;
+}
+
+#btnSegmentar:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #adffc3;
+  border-top: 3px solid #007406;
+  border-radius: 50%;
+  animation: spin 0.5s linear infinite;
+  margin:auto;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

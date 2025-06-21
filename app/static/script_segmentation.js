@@ -108,6 +108,15 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        const btn = document.getElementById('btnSegmentar');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        // Início do carregamento
+        btn.disabled = true;
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline-block';
+
         const layer = drawnItems.getLayers()[0];
         const bounds = layer.getBounds();
         const bbox = [
@@ -135,6 +144,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => {
                 console.error("Erro na requisição:", error);
-            });
+            })
+             .finally(() => {
+            // Em caso de erro ou interrupção (se não redirecionar), reativa o botão
+            btn.disabled = false;
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+        });
     });
 });
