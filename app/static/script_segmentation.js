@@ -11,12 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add default layer (RGB)
     bandLayers.rgb.addTo(map);
 
-    // Change layer when user selects a band
-    document.getElementById('band-options').addEventListener('change', function (e) {
-        Object.values(bandLayers).forEach(layer => layer.remove());
-        bandLayers[e.target.value].addTo(map);
-    });
-
     // Configure search control 
     var searchControl = L.esri.Geocoding.geosearch({
         position: 'topright',
@@ -109,40 +103,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     document.getElementById('btnSegmentar').addEventListener('click', () => {
-    if (drawnItems.getLayers().length === 0) {
-        alert("Por favor, selecione uma área antes de segmentar.");
-        return;
-    }
-
-    const layer = drawnItems.getLayers()[0];
-    const bounds = layer.getBounds();
-    const bbox = [
-        bounds.getWest(),
-        bounds.getSouth(),
-        bounds.getEast(),
-        bounds.getNorth()
-    ];
-
-    // Salva no backend e depois redireciona
-    fetch('/segmentar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bbox: bbox })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'sucesso') {
-            // Redireciona para a nova página passando o bbox como parâmetro
-            const query = `?bbox=${bbox.join(',')}`;
-            window.location.href = '/resultado' + query;
-        } else {
-            alert("Erro na segmentação: " + data.mensagem);
+        if (drawnItems.getLayers().length === 0) {
+            alert("Por favor, selecione uma área antes de segmentar.");
+            return;
         }
-    })
-    .catch(error => {
-        console.error("Erro na requisição:", error);
+
+        const layer = drawnItems.getLayers()[0];
+        const bounds = layer.getBounds();
+        const bbox = [
+            bounds.getWest(),
+            bounds.getSouth(),
+            bounds.getEast(),
+            bounds.getNorth()
+        ];
+
+        // Salva no backend e depois redireciona
+        fetch('/segmentar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bbox: bbox })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'sucesso') {
+                    // Redireciona para a nova página passando o bbox como parâmetro
+                    const query = `?bbox=${bbox.join(',')}`;
+                    window.location.href = '/classification' + query;
+                } else {
+                    alert("Erro na segmentação: " + data.mensagem);
+                }
+            })
+            .catch(error => {
+                console.error("Erro na requisição:", error);
+            });
     });
-});
-
-
 });

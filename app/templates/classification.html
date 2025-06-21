@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR"></html>
+<html lang="pt-BR">
+
+</html>
 <html>
+
 <head>
     <!-- Metadata -->
     <meta charset="UTF-8">
@@ -11,7 +14,7 @@
 
     <!-- CSS and JAVASCRIPT includes -->
     <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/script_classify.js"></script>
+    <script src="../static/script_classification.js"></script>
 
     <!-- LEAFLET include -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -19,7 +22,12 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-        <!-- Fonts -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/geotiff"></script>
+    <script src="https://unpkg.com/georaster"></script>
+    <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -39,21 +47,33 @@
         </div>
     </header>
 
-     <div class="content">
+    <div class="content">
         <div class="map-area">
-            <h1 class="title"> Classifique os polígonos </h1>
+            <h1 class="title">Classifique os polígonos</h1>
             <div id="map"></div>
             <select id="band-options">
-              <option value="rgb">Natural Color (RGB)</option>
-              <!--<option value="nir">Near Infrared (NIR)</option>-->
+                <option value="original">Original (ArcGIS)</option>
+                <option value="B01.tif">B01</option>
+                <option value="B02.tif">B02</option>
+                <option value="B03.tif">B03</option>
+                <option value="B04.tif">B04</option>
+                <option value="B05.tif">B05</option>
+                <option value="B06.tif">B06</option>
+                <option value="B07.tif">B07</option>
+                <option value="B08.tif">B08 (NIR)</option>
+                <option value="B09.tif">B09</option>
+                <option value="B11.tif">B11 (SWIR)</option>
+                <option value="B12.tif">B12</option>
+                <option value="RGB_composicao_8bit.tif">RGB</option>
             </select>
         </div>
-            
+
         <div class="controls">
             <h1> Escolha a classe </h1>
-            
+
             <button id="btnSegmentar"> FINALIZAR </button>
         </div>
     </div>
 </body>
+
 </html>

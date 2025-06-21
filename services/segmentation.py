@@ -11,6 +11,11 @@ from sentinelhub import (
 from skimage.segmentation import slic, mark_boundaries
 from skimage.util import img_as_float
 from rasterio.transform import from_bounds
+from rasterio.features import shapes
+from shapely.geometry import shape
+import geopandas as gpd
+from skimage.segmentation import slic
+from skimage.util import img_as_float
 
 # === CONFIGURAÇÕES GERAIS ===
 BANDAS_TODAS = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06',
@@ -20,7 +25,6 @@ OUTPUT_DIR = './SENTINEL2_BANDAS'
 
 
 # === BAIXAR BANDAS ===
-
 def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=None):
     config = SHConfig()
     config.sh_client_id = 'b38dba7b-11a9-43b1-8e86-688ba3ac619a'
@@ -103,8 +107,6 @@ def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=No
     return f"✅ Bandas salvas com bbox {bbox}"
 
 
-
-
 # === CRIAR MULTIBANDA ===
 def criar_multibanda(bandas, output_dir, output_path):
     arrays = []
@@ -155,18 +157,8 @@ def criar_rgb_8bit(bandas_rgb, output_dir, output_path):
     print(f"📸 RGB 8 bits salvo em: {output_path}")
 
 
-
 # === SEGMENTAÇÃO COM SLIC (skimage) ===
 def aplicar_segmentacao_multibanda(image_path, output_dir, compactness=5, step=200, output_filename='segments_slic.shp'):
-    import rasterio
-    from rasterio.features import shapes
-    from shapely.geometry import shape
-    import geopandas as gpd
-    from skimage.segmentation import slic
-    from skimage.util import img_as_float
-    import numpy as np
-    import os
-    import matplotlib.pyplot as plt
 
     # === Ler raster multibanda
     with rasterio.open(image_path) as src:
@@ -197,10 +189,8 @@ def aplicar_segmentacao_multibanda(image_path, output_dir, compactness=5, step=2
     gdf = gdf[gdf.geometry.is_valid & gdf.geometry.notna()]
     gdf = gdf[~gdf.geometry.is_empty]
 
-# ⚠️ Não calcular área e nem reprojetar por enquanto
-# Apenas salvar e plotar
-
-
+    # ⚠️ Não calcular área e nem reprojetar por enquanto
+    # Apenas salvar e plotar
     shapefile_path = os.path.join(output_dir, output_filename)
     gdf.to_file(shapefile_path)
     print(f"✅ Shapefile salvo com {len(gdf)} polígonos: {shapefile_path}")
@@ -219,7 +209,7 @@ def aplicar_segmentacao_multibanda(image_path, output_dir, compactness=5, step=2
 
             plt.title("Segmentação SLIC - Vetorial sobre RGB", fontsize=14)
             plt.axis('off')
-            plt.show()
+            # plt.show()
     else:
         print("⚠️ RGB não encontrado.")
 
@@ -245,7 +235,6 @@ def processar_segmentacao_completa(output_dir=OUTPUT_DIR, bbox=None):
     )
 
     return f"✅ Segmentação finalizada com bbox: {bbox}"
-
 
 
 # Para rodar tudo:

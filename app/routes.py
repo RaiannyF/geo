@@ -1,16 +1,15 @@
 from app import app
 import geopandas as gpd
 import os
-from flask import jsonify, render_template
-# from services.sentinel import processar_segmentacao_completa
+from flask import jsonify, render_template, send_from_directory, request
+
 from services.segmentation import processar_segmentacao_completa
+
 
 @app.route('/')
 def home():
-    return render_template('index.html')  # Carrega index.html
+    return render_template('index.html')
 
-
-from flask import request, jsonify
 
 @app.route('/segmentar', methods=['POST'])
 def segmentar():
@@ -32,9 +31,10 @@ def segmentar():
     except Exception as e:
         return jsonify({'status': 'erro', 'mensagem': str(e)}), 500
     
-@app.route('/resultado')
+    
+@app.route('/classification')
 def resultado():
-    return render_template('resultado.html')
+    return render_template('classification.html')
 
 
 @app.route('/resultado_geojson')
@@ -46,3 +46,10 @@ def resultado_geojson():
 
     gdf = gpd.read_file(shapefile_path)
     return gdf.to_json()
+
+@app.route('/bandas/<nome>')
+def servir_banda(nome):
+    pasta_absoluta = os.path.abspath('./SENTINEL2_BANDAS')
+    if os.path.exists(os.path.join(pasta_absoluta, nome)):
+        return send_from_directory(pasta_absoluta, nome)
+    return 'Arquivo não encontrado', 404
