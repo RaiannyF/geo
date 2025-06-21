@@ -10,9 +10,14 @@ Baixe o projeto:
 git clone https://github.com/RaiannyF/geo.git
 ```
 
-Entre na pasta do projeto e rode o seguinte comando:
+Entre na pasta do projeto e construa a imagem Docker:
 ```bash
-python3 run.py .
+docker build -t geo-app .
+```
+
+Rode a aplicação:
+```bash
+docker run -p 5000:5000 geo-app
 ```
 
 Agora, basta acessar o link gerado para acessar a interface web.
