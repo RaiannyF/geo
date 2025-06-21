@@ -10,6 +10,7 @@ from sentinelhub import (
 )
 from skimage.segmentation import slic, mark_boundaries
 from skimage.util import img_as_float
+from rasterio.transform import from_bounds
 
 # === CONFIGURAÇÕES GERAIS ===
 BANDAS_TODAS = ['B01', 'B02', 'B03', 'B04', 'B05', 'B06',
@@ -19,6 +20,7 @@ OUTPUT_DIR = './SENTINEL2_BANDAS'
 
 
 # === BAIXAR BANDAS ===
+
 def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=None):
     config = SHConfig()
     config.sh_client_id = 'b38dba7b-11a9-43b1-8e86-688ba3ac619a'
@@ -29,7 +31,6 @@ def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=No
     if bbox:
         aoi = BBox(bbox=bbox, crs=CRS.WGS84)
     else:
-        # Default para testes
         aoi = BBox(bbox=[-44.0, -21.5, -43.4, -20.9], crs=CRS.WGS84)
 
     width, height = bbox_to_dimensions(aoi, resolution=resolucao)
@@ -78,7 +79,13 @@ def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=No
             image = np.expand_dims(image, axis=0)
 
         _, h, w = image.shape
-        transform = from_origin(aoi.lower_left[0], aoi.upper_right[1], resolucao, resolucao)
+
+        # Aqui o transform correto usando from_bounds
+        transform = from_bounds(
+            aoi.min_x, aoi.min_y, aoi.max_x, aoi.max_y,
+            w, h
+        )
+
         path_out = os.path.join(output_dir, f'{banda}.tif')
 
         with rasterio.open(
@@ -94,6 +101,7 @@ def baixar_bandas_sentinel(output_dir=OUTPUT_DIR, dias=60, resolucao=30, bbox=No
             dst.write(image[0], 1)
 
     return f"✅ Bandas salvas com bbox {bbox}"
+
 
 
 
