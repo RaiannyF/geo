@@ -1,2 +1,3 @@
 # Ignorar pastas específicas
 venv/
+SENTINEL2_BANDAS/

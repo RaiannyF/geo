@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Spectral band layers
     var bandLayers = {
         // Using arcGIS to RGB
-        rgb: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'), 
+        rgb: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
     };
 
     // Add default layer (RGB)
@@ -69,6 +69,93 @@ document.addEventListener("DOMContentLoaded", function () {
             .setLatLng(map.getCenter())
             .setContent('<p>Search service unavailable. Please try again later.</p>')
             .openOn(map);
+    });
+
+
+    // Grupo onde os desenhos serão adicionados
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    // Controle de desenho
+    var drawControl = new L.Control.Draw({
+        draw: {
+            polyline: false,
+            polygon: false,
+            circle: false,
+            marker: false,
+            circlemarker: false,
+            rectangle: true // habilita apenas o retângulo
+        },
+        edit: {
+            featureGroup: drawnItems, // grupo a ser editado
+            edit: true,
+            remove: true
+        }
+    });
+    map.addControl(drawControl);
+
+    // Permitir apenas uma seleção por vez
+    map.on('draw:created', function (e) {
+        // Limpa qualquer seleção anterior
+        drawnItems.clearLayers();
+
+        // Adiciona a nova seleção
+        var layer = e.layer;
+        drawnItems.addLayer(layer);
+
+        var bounds = layer.getBounds();
+        console.log("Área selecionada:", bounds);
+    });
+
+
+    document.getElementById('btnSegmentar').addEventListener('click', () => {
+        console.log("Segmentação iniciada...");
+
+        // Verifica se existe uma seleção
+        if (drawnItems.getLayers().length === 0) {
+            alert("Por favor, selecione uma área antes de segmentar.");
+            return;
+        }
+
+        // Obtém o primeiro (e único) layer
+        const layer = drawnItems.getLayers()[0];
+        const bounds = layer.getBounds();
+
+        // Formata o BBox: [minLng, minLat, maxLng, maxLat]
+        const bbox = [
+            bounds.getWest(),
+            bounds.getSouth(),
+            bounds.getEast(),
+            bounds.getNorth()
+        ];
+
+        console.log("Enviando BBox:", bbox);
+
+        // Envia para o backend
+        fetch('/segmentar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bbox: bbox })  // Envia como JSON
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro na resposta da API");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Resposta recebida:", data);
+                if (data.status === 'sucesso') {
+                    alert(data.mensagem);
+                } else {
+                    console.error("Erro no backend:", data.mensagem);
+                }
+            })
+            .catch(error => {
+                console.error("Erro na requisição:", error);
+            });
     });
 
 });
