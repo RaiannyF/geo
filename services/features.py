@@ -1,4 +1,4 @@
-# services/features.py — v7.9.2 (NDSI sim, EBBI não)
+# services/features.py — v7.9.3
 import os
 from typing import Dict, List, Optional, Tuple
 
@@ -60,8 +60,10 @@ def _compute_indices(ref: np.ndarray, band_to_idx: Dict[str, int]) -> Dict[str, 
 
     # NDSI (Snow/soil/bright surfaces vs SWIR) — padrão: (Green - SWIR1)/(Green + SWIR1)
     ndsi = (G - SWIR1) / (G + SWIR1 + eps)
+    # EBBI (Enhanced Built-up and Bareness Index) — realça áreas construídas e solo exposto
+    ebbi = (SWIR1 - NIR) / (10.0 * np.sqrt(SWIR1 + NIR + eps))
 
-    # Mantidos (se quiser remover depois, ok)
+    # Mantidos 
     ndbi = (SWIR1 - NIR) / (SWIR1 + NIR + eps)
     mndwi = (G - SWIR1) / (G + SWIR1 + eps)  # igual ao NDSI (mesma fórmula)
     evi = 2.5 * (NIR - R) / (NIR + 6 * R - 7.5 * B + 1.0)
@@ -74,6 +76,7 @@ def _compute_indices(ref: np.ndarray, band_to_idx: Dict[str, int]) -> Dict[str, 
         "MNDWI": mndwi.astype(np.float32),
         "EVI": evi.astype(np.float32),
         "NBR": nbr.astype(np.float32),
+        "EBBI": ebbi.astype(np.float32),
     }
 
 
